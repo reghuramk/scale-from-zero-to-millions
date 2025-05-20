@@ -14,7 +14,6 @@ router.post('/shorten', async (req, res) => {
   const row = insertRes.rows[0];
   const shortCode = encodeBase62(row.id);
 
-  // Update with real shortCode
   await query('UPDATE urls SET short_code = $1 WHERE id = $2', [shortCode, row.id]);
 
   res.json({ shortUrl: `http://localhost:3000/${shortCode}` });
