@@ -1,35 +1,27 @@
 {
-  "name": "scale-from-zero-to-millions",
+  "name": "js",
   "version": "1.0.0",
-  "description": "A project that tests the scalability from zero to million users ",
-  "homepage": "https://github.com/reghuramk/scale-from-zero-to-millions#readme",
-  "bugs": {
-    "url": "https://github.com/reghuramk/scale-from-zero-to-millions/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/reghuramk/scale-from-zero-to-millions.git"
-  },
-  "license": "ISC",
-  "author": "",
-  "type": "commonjs",
   "main": "index.js",
   "scripts": {
+    "dev": "npm-run-all --parallel dev:*",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "esbuild src/index.ts --bundle --platform=node --outdir=dist",
     "start": "node dist/index.js",
+    "dev:node": "node --watch dist/index.js",
+    "dev:tsc": "tsc --watch",
     "dev:esbuild": "esbuild --watch src/index.ts --bundle --platform=node --outdir=dist"
   },
+  "author": "",
+  "license": "ISC",
+  "description": "",
   "devDependencies": {
-    "@types/express": "^5.0.1",
-    "@types/node": "^22.15.18",
-    "typescript": "^5.8.3"
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.13.9",
+    "esbuild": "^0.25.0",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.8.2"
   },
   "dependencies": {
-    "axios": "^1.9.0",
-    "esbuild": "^0.25.4",
-    "express": "^5.1.0",
-    "ioredis": "^5.6.1",
-    "pg": "^8.16.0"
+    "express": "^4.21.2"
   }
 }
