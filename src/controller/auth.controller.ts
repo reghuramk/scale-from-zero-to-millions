@@ -1,9 +1,22 @@
-import {Request, Response } from 'express'
-import * as Authservice from '../services/auth.service';
-import { UserType } from '../services/types';
+import { Request, Response } from "express";
 
-export const register = async (req: Request, res: Response) => {
-const {name, password, email, provider} = req.body
-const user: UserType = await Authservice.register(email, password, name, provider)
-res.status(201).json({id: user.id, email: user.email})
-}
+import * as Authservice from "../services/auth.service";
+import { UserType } from "../services/types";
+
+export const register = async (
+  req: Request<unknown, unknown, UserType>,
+  res: Response,
+): Promise<Response> => {
+  try {
+    const { email, name, password, provider }: UserType = req.body;
+    const user: UserType = await Authservice.register(
+      email,
+      password ?? "",
+      name,
+      provider ?? "",
+    );
+    return res.status(201).json({ email: user.email, id: user.id });
+  } catch (error) {
+    return res.status(500).json({ error, message: "Internal Server Error" });
+  }
+};

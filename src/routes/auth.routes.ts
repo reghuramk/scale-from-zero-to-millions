@@ -1,8 +1,11 @@
 import { Router } from "express";
-import * as AuthController from '../controller/auth.controller'
 
-const router = Router()
+import * as AuthController from "../controller/auth.controller";
 
-router.post('/register', AuthController.register)
+const router = Router();
 
-export default router
+router.post("/register", (req, res, next) => {
+  Promise.resolve(AuthController.register(req, res)).catch(next);
+});
+
+export default router;
