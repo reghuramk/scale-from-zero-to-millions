@@ -25,3 +25,10 @@ export const register = async (
     throw new Error(`User insert failed: ${(error as Error).message}`);
   }
 };
+
+export const login = async (email: string, password: string) => {
+  try {
+  } catch (error) {
+    throw new Error("User not recognised");
+  }
+};

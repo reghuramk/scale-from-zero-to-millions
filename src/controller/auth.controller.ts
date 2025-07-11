@@ -12,11 +12,23 @@ export const register = async (
     const user: UserType = await Authservice.register(
       email,
       password ?? "",
-      name,
+      name ?? "",
       provider ?? "",
     );
     return res.status(201).json({ email: user.email, id: user.id });
   } catch (error) {
     return res.status(500).json({ error, message: "Internal Server Error" });
+  }
+};
+
+export const signin = async (
+  req: Request<unknown, unknown, UserType>,
+  res: Response,
+): Promise<Response> => {
+  try {
+    const { email, password }: UserType = req.body;
+    return res.status(201);
+  } catch (error) {
+    return res.status(500).json({ error, message: "User not recognised" });
   }
 };
