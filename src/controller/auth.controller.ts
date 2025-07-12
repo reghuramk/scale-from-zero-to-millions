@@ -32,3 +32,19 @@ export const signin = async (
     return res.status(500).json({ error, message: "User not recognised" });
   }
 };
+
+// export const refresh = async (req: Request, res: Response) => {
+//   const token = req.cookies.refresh_token;
+//   if (!token) return res.sendStatus(401);
+
+//   try {
+//     const payload: any = await AuthService.verifyRefreshToken(token);
+//     const stored = await redis.get(`refresh:${payload.userId}`);
+//     if (stored !== token) return res.sendStatus(403);
+
+//     const newAccess = signAccessToken(payload.userId);
+//     res.json({ accessToken: newAccess });
+//   } catch (e) {
+//     res.sendStatus(403);
+//   }
+// };
