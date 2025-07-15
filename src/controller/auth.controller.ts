@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 
 import * as Authservice from "../services/auth.service";
-import { UserType } from "../services/types";
+import { RegisterResponseType, UserType } from "../services/types";
 
 export const register = async (
   req: Request<unknown, unknown, UserType>,
@@ -9,42 +9,55 @@ export const register = async (
 ): Promise<Response> => {
   try {
     const { email, name, password, provider }: UserType = req.body;
-    const user: UserType = await Authservice.register(
-      email,
-      password ?? "",
-      name ?? "",
-      provider ?? "",
-    );
+    const { accessToken, refreshToken, user }: RegisterResponseType =
+      await Authservice.register(
+        email,
+        password ?? "",
+        name ?? "",
+        provider ?? "",
+      );
+
+    res.cookie("access_token", accessToken, {
+      httpOnly: true,
+      maxAge: 15 * 60 * 1000,
+      sameSite: "strict",
+      secure: true,
+    });
+
+    res.cookie("refresh_token", refreshToken, {
+      httpOnly: true,
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      sameSite: "strict",
+      secure: true,
+    });
+
     return res.status(201).json({ email: user.email, id: user.id });
   } catch (error) {
-    return res.status(500).json({ error, message: "Internal Server Error" });
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
-export const signin = async (
-  req: Request<unknown, unknown, UserType>,
-  res: Response,
-): Promise<Response> => {
-  try {
-    const { email, password }: UserType = req.body;
-    return res.status(201);
-  } catch (error) {
-    return res.status(500).json({ error, message: "User not recognised" });
-  }
-};
-
-// export const refresh = async (req: Request, res: Response) => {
-//   const token = req.cookies.refresh_token;
-//   if (!token) return res.sendStatus(401);
-
+// export const signin = async (
+//   req: Request<unknown, unknown, UserType>,
+//   res: Response,
+// ): Promise<Response> => {
 //   try {
-//     const payload: any = await AuthService.verifyRefreshToken(token);
-//     const stored = await redis.get(`refresh:${payload.userId}`);
-//     if (stored !== token) return res.sendStatus(403);
+//     const { email, password }: UserType = req.body;
+//     return res.status(201);
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({ message: "User not recognised" });
+//   }
+// };
 
-//     const newAccess = signAccessToken(payload.userId);
-//     res.json({ accessToken: newAccess });
-//   } catch (e) {
-//     res.sendStatus(403);
+// export const refresh = async (
+//   req: Request<unknown, unknown, UserType>,
+//   res: Response,
+// ): Promise<Response> => {
+//   try {
+
+//   } catch (error) {
+//     console.error(error);
 //   }
 // };

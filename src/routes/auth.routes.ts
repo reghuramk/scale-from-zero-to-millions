@@ -4,8 +4,6 @@ import * as AuthController from "../controller/auth.controller";
 
 const router = Router();
 
-router.post("/register", (req, res, next) => {
-  Promise.resolve(AuthController.register(req, res)).catch(next);
-});
+router.post("/register", AuthController.register);
 
 export default router;
