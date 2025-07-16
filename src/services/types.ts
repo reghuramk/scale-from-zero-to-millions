@@ -10,4 +10,5 @@ export interface UserType {
   name?: string;
   password?: string;
   provider?: string;
+  sex: "female" | "male" | "other";
 }

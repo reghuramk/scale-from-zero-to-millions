@@ -8,13 +8,14 @@ export const register = async (
   res: Response,
 ): Promise<Response> => {
   try {
-    const { email, name, password, provider }: UserType = req.body;
+    const { email, name, password, provider, sex }: UserType = req.body;
     const { accessToken, refreshToken, user }: RegisterResponseType =
       await Authservice.register(
         email,
         password ?? "",
         name ?? "",
         provider ?? "",
+        sex,
       );
 
     res.cookie("access_token", accessToken, {

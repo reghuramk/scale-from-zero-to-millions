@@ -1,8 +1,8 @@
-import * as argon2 from "argon2";
+import bcrypt from "bcryptjs";
 
 import db from "../db/pg";
 import { signAccessToken, signRefreshToken } from "../utils/jwt";
-// import { redis } from "../utils/redis";
+import { redis } from "../utils/redis";
 import { RegisterResponseType, UserType } from "./types";
 
 export const register = async (
@@ -10,13 +10,13 @@ export const register = async (
   password: string,
   name: string,
   provider: string,
+  sex: string,
 ): Promise<RegisterResponseType> => {
   try {
-    const hashedPassword = await argon2.hash(password);
-
+    const hashedPassword: string = await bcrypt.hash(password, 10);
     const { rows }: { rows: UserType[] } = await db.query(
-      `INSERT INTO users (email, name, provider, hashedPassword) VALUES ($1, $2, $3, $4) RETURNING *`,
-      [email, name, provider, hashedPassword],
+      `INSERT INTO users (email, name, provider, password_hash, sex) VALUES ($1, $2, $3, $4) RETURNING *`,
+      [email, name, provider, hashedPassword, sex],
     );
     const user = rows[0];
 
@@ -26,6 +26,13 @@ export const register = async (
 
     const accessToken: string = signAccessToken(user.id ?? "");
     const refreshToken: string = signRefreshToken(user.id ?? "");
+
+    await redis.set(
+      `refresh:${user.id ?? ""}`,
+      refreshToken,
+      "EX",
+      60 * 60 * 24 * 7,
+    );
 
     return { accessToken, refreshToken, user };
   } catch (error) {
