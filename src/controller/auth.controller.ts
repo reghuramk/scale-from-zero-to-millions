@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 
 import * as Authservice from "../services/auth.service";
 import { RegisterResponseType, UserType } from "../services/types";
@@ -6,7 +6,8 @@ import { RegisterResponseType, UserType } from "../services/types";
 export const register = async (
   req: Request<unknown, unknown, UserType>,
   res: Response,
-): Promise<Response> => {
+  next: NextFunction,
+): Promise<Response | undefined> => {
   try {
     const { email, name, password, provider, sex }: UserType = req.body;
     const { accessToken, refreshToken, user }: RegisterResponseType =
@@ -34,8 +35,7 @@ export const register = async (
 
     return res.status(201).json({ email: user.email, id: user.id });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Internal Server Error" });
+    next(error);
   }
 };
 

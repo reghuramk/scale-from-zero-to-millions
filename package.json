@@ -4,12 +4,13 @@
   "main": "index.js",
   "scripts": {
     "dev": "npm-run-all --parallel dev:*",
+    "debug": "npm run start",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "esbuild src/index.ts --bundle --platform=node --outdir=dist",
+    "build": "esbuild src/index.ts --bundle --platform=node --sourcemap --outdir=dist",
     "start": "node --env-file=.env dist/index.js",
     "dev:node": "node --watch dist/index.js",
     "dev:tsc": "tsc --watch",
-    "dev:esbuild": "esbuild --watch src/index.ts --bundle --platform=node --outdir=dist",
+    "dev:esbuild": "esbuild --watch src/index.ts --bundle --platform=node --sourcemap --outdir=dist",
     "prepare": "husky"
   },
   "lint-staged": {

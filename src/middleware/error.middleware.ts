@@ -1,14 +1,30 @@
-import { ErrorRequestHandler } from "express";
+import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
 
-export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
-  console.error("Error:", err);
+import * as Constants from "../utils/constants";
 
-  const status = err.status ?? 500;
-  const message = err.message ?? "Internal Server Error";
+export const notFoundHandler = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const error = new Error(Constants.ROUTE_NOT_FOUND);
+  res.status(404);
+  next(error);
+};
 
-  res.status(status).json({
+export const errorHandler: ErrorRequestHandler = (
+  err: Error,
+  req: Request,
+  res: Response,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  next: NextFunction,
+) => {
+  const statusCode: number = res.statusCode == 200 ? 500 : res.statusCode;
+  const message = err.message || "Internal Server Error from error middleware";
+
+  res.status(statusCode).json({
     message,
     success: false,
-    ...(process.env.NODE_ENV === "development" && { stack: err.stack }),
+    ...(process.env.NODE_ENV === "DEVELOPMENT" && { stack: err.stack }),
   });
 };
