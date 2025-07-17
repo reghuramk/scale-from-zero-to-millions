@@ -2,6 +2,9 @@ import { NextFunction, Request, Response } from "express";
 
 import * as Authservice from "../services/auth.service";
 import { RegisterResponseType, UserType } from "../services/types";
+import { Constants } from "../utils/constants";
+
+const { TOKENS } = Constants;
 
 export const register = async (
   req: Request<unknown, unknown, UserType>,
@@ -19,14 +22,14 @@ export const register = async (
         sex,
       );
 
-    res.cookie("access_token", accessToken, {
+    res.cookie(TOKENS.ACCESS_TOKEN, accessToken, {
       httpOnly: true,
       maxAge: 15 * 60 * 1000,
       sameSite: "strict",
       secure: true,
     });
 
-    res.cookie("refresh_token", refreshToken, {
+    res.cookie(TOKENS.REFRESH_TOKEN, refreshToken, {
       httpOnly: true,
       maxAge: 30 * 24 * 60 * 60 * 1000,
       sameSite: "strict",

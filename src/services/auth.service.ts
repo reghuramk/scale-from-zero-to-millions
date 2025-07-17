@@ -1,9 +1,12 @@
 import bcrypt from "bcryptjs";
 
 import db from "../db/pg";
+import { Constants } from "../utils/constants";
 import { signAccessToken, signRefreshToken } from "../utils/jwt";
 import { redis } from "../utils/redis";
 import { RegisterResponseType, UserType } from "./types";
+
+const { MESSAGES } = Constants;
 
 export const register = async (
   email: string,
@@ -21,7 +24,7 @@ export const register = async (
     const user = rows[0];
 
     if (!user) {
-      throw new Error("User insert failed: no user returned");
+      throw new Error(MESSAGES.USER_INSERT_FAILED);
     }
 
     const accessToken: string = signAccessToken(user.id ?? "");
@@ -36,7 +39,9 @@ export const register = async (
 
     return { accessToken, refreshToken, user };
   } catch (error) {
-    throw new Error(`User insert failed: ${(error as Error).message}`);
+    throw new Error(
+      `${MESSAGES.USER_INSERT_FAILED}: ${(error as Error).message}`,
+    );
   }
 };
 

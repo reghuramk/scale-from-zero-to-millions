@@ -1,10 +1,14 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 
+import { Constants } from "../utils/constants";
+
+const { MESSAGES } = Constants;
+
 export const authGuard = (req: Request, res: Response, next: NextFunction) => {
   const token = req.headers.authorization?.split(" ")[1];
   if (!token) {
-    res.status(401).json({ message: "Unauthorized" });
+    res.status(401).json({ message: MESSAGES.UNAUTHORISED });
     return;
   }
 
@@ -13,6 +17,6 @@ export const authGuard = (req: Request, res: Response, next: NextFunction) => {
     console.log(decoded);
     next();
   } catch {
-    res.status(401).json({ message: "Invalid token" });
+    res.status(401).json({ message: MESSAGES.INVALID_TOKEN });
   }
 };

@@ -1,13 +1,15 @@
 import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
 
-import * as Constants from "../utils/constants";
+import { Constants } from "../utils/constants";
+
+const { ENVIRONMENT, MESSAGES } = Constants;
 
 export const notFoundHandler = (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
-  const error = new Error(Constants.ROUTE_NOT_FOUND);
+  const error = new Error(MESSAGES.ROUTE_NOT_FOUND);
   res.status(404);
   next(error);
 };
@@ -20,11 +22,13 @@ export const errorHandler: ErrorRequestHandler = (
   next: NextFunction,
 ) => {
   const statusCode: number = res.statusCode == 200 ? 500 : res.statusCode;
-  const message = err.message || "Internal Server Error from error middleware";
+  const message = err.message || MESSAGES.INTERNAL_SERVER_ERROR;
 
   res.status(statusCode).json({
     message,
     success: false,
-    ...(process.env.NODE_ENV === "DEVELOPMENT" && { stack: err.stack }),
+    ...(process.env.NODE_ENV === ENVIRONMENT.DEVELOPMENT && {
+      stack: err.stack,
+    }),
   });
 };
