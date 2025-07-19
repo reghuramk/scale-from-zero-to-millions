@@ -6,7 +6,7 @@ import { signAccessToken, signRefreshToken } from "../utils/jwt";
 import { redis } from "../utils/redis";
 import { RegisterResponseType, UserType } from "./types";
 
-const { MESSAGES } = Constants;
+const { MESSAGES, TOKENS } = Constants;
 
 export const register = async (
   email: string,
@@ -31,7 +31,7 @@ export const register = async (
     const refreshToken: string = signRefreshToken(user.id ?? "");
 
     await redis.set(
-      `refresh:${user.id ?? ""}`,
+      `${TOKENS.REFRESH_TOKEN}:${user.id ?? ""}`,
       refreshToken,
       "EX",
       60 * 60 * 24 * 7,
