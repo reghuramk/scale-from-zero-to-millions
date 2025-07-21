@@ -1,10 +1,14 @@
 import { NextFunction, Request, Response } from "express";
 
 import * as Authservice from "../services/auth.service";
-import { RegisterResponseType, UserType } from "../services/types";
+import {
+  // GoogleSigninResponseType,
+  RegisterResponseType,
+  UserType,
+} from "../services/types";
 import { Constants } from "../utils/constants";
 
-const { TOKENS } = Constants;
+const { MESSAGES, TOKENS } = Constants;
 
 export const register = async (
   req: Request<unknown, unknown, UserType>,
@@ -36,11 +40,37 @@ export const register = async (
       secure: true,
     });
 
-    return res.status(201).json({ email: user.email, id: user.id });
+    return res.status(201).json({
+      email: user.email,
+      id: user.id,
+      message: MESSAGES.USER_INSERT_SUCCEEDED,
+    });
   } catch (error) {
     next(error);
   }
 };
+
+// export const googleLogin = async (
+//   res: Response,
+//   req: Request,
+//   next: NextFunction,
+// ): Promise<Response | undefined> => {
+//   try {
+//     const { idToken }: { idToken: string } = req.body;
+//     const { name, email, googleId, picture }: GoogleSigninResponseType =
+//       await Authservice.verifyGoogleToken(idToken);
+
+//     let user: aw
+
+//     return res.status(201).json({
+//       email: user.email,
+//       id: user.id,
+//       message: MESSAGES.USER_INSERT_SUCCEEDED,
+//     });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
 
 // export const signin = async (
 //   req: Request<unknown, unknown, UserType>,

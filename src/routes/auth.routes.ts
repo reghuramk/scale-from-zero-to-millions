@@ -10,7 +10,7 @@ const { ROUTES } = Constants;
 const router = Router();
 
 router.post(
-  ROUTES.AUTH.REGISTER,
+  ROUTES.AUTH.REGISTER.replace(ROUTES.AUTH.BASE, ""),
   validate(registrationSchema),
   AuthController.register,
 );

@@ -1,3 +1,10 @@
+export interface GoogleSigninResponseType {
+  email: string;
+  googleId: string;
+  name: string;
+  picture: string;
+}
+
 export interface RegisterResponseType {
   accessToken: string;
   refreshToken: string;
