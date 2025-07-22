@@ -62,6 +62,8 @@ export const verifyGoogleToken = async (
       idToken,
     });
 
+    // const token = await client.getToken
+
     const payload = ticket.getPayload();
     if (!payload) {
       throw new Error(MESSAGES.INVALID_GOOGLE_TOKEN);
@@ -70,7 +72,7 @@ export const verifyGoogleToken = async (
       email: payload.email ?? "",
       googleId: payload.sub,
       name: payload.name ?? "",
-      picture: payload.picture ?? "",
+      picture: payload.at_hash ?? "",
     };
   } catch (error) {
     throw new Error(

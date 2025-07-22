@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 
+// import db from "../db/pg";
 import * as Authservice from "../services/auth.service";
 import {
   // GoogleSigninResponseType,
@@ -23,7 +24,7 @@ export const register = async (
         password ?? "",
         name ?? "",
         provider ?? "",
-        sex,
+        sex ?? "",
       );
 
     res.cookie(TOKENS.ACCESS_TOKEN, accessToken, {
@@ -51,16 +52,23 @@ export const register = async (
 };
 
 // export const googleLogin = async (
+//   req: Request<unknown, unknown, UserType>,
 //   res: Response,
-//   req: Request,
 //   next: NextFunction,
 // ): Promise<Response | undefined> => {
 //   try {
-//     const { idToken }: { idToken: string } = req.body;
-//     const { name, email, googleId, picture }: GoogleSigninResponseType =
-//       await Authservice.verifyGoogleToken(idToken);
+//     const { idToken }: UserType = req.body;
+//     const { email, googleId, name, picture }: GoogleSigninResponseType =
+//       await Authservice.verifyGoogleToken(idToken ?? "");
 
-//     let user: aw
+//     let user: unknown = await db.query(
+//       `SELECT * FROM USERS WHERE EMAIL = '${email}'`,
+//     );
+
+//     user ??= await db.query(
+//       `INSERT INTO users (email, name, provider, password_hash, sex) VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+//       [email, name, provider, hashedPassword, sex],
+//     );
 
 //     return res.status(201).json({
 //       email: user.email,

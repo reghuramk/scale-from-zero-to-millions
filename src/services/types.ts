@@ -4,7 +4,6 @@ export interface GoogleSigninResponseType {
   name: string;
   picture: string;
 }
-
 export interface RegisterResponseType {
   accessToken: string;
   refreshToken: string;
@@ -14,8 +13,9 @@ export interface RegisterResponseType {
 export interface UserType {
   email: string;
   id?: string;
+  idToken?: string;
   name?: string;
   password?: string;
   provider?: string;
-  sex: "female" | "male" | "other";
+  sex?: "female" | "male" | "other";
 }
