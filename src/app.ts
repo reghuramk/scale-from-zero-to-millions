@@ -1,9 +1,9 @@
 import cors from "cors";
 import express from "express";
 
-import { Middleware } from "./middleware";
-import authRoutes from "./routes/auth.routes";
-import { Constants } from "./utils/constants";
+import { Middleware } from "./middleware/index.js";
+import authRoutes from "./routes/auth.routes.js";
+import { Constants } from "./utils/constants/index.js";
 
 const { ROUTES } = Constants;
 

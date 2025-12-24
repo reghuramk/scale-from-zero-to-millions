@@ -1,6 +1,6 @@
 import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
 
-import { Constants } from "../utils/constants";
+import { Constants } from "../utils/constants/index.js";
 
 const { ENVIRONMENT, MESSAGES } = Constants;
 

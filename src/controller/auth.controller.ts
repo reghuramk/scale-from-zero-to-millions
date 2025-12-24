@@ -7,7 +7,7 @@ import {
   RegisterResponseType,
   UserType,
 } from "../services/types";
-import { Constants } from "../utils/constants";
+import { Constants } from "../utils/constants/index";
 
 const { MESSAGES, TOKENS } = Constants;
 
